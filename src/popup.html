@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Coursera Notes Generator</title>
+  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="../vendor/katex.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="../assets/icon128.png" alt="Icon" width="24" height="24">
+      <h2>Coursera Notes</h2>
+      <button id="settings-btn" title="Settings" style="background: none; border: none; font-size: 18px; padding: 4px; color: #444; width: auto; cursor: pointer;">⚙️</button>
+      <button id="generate-btn">Generate</button>
+    </div>
+
+    <!-- API Settings Panel -->
+    <div id="settings-panel" class="hidden" style="margin-top: 10px; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 6px;">
+      <label style="font-size: 12px; font-weight: bold;">Groq API Key:</label>
+      <input type="password" id="api-key-input" placeholder="gsk_..." style="width: 100%; box-sizing: border-box; margin-bottom: 8px; padding: 5px; border border-radius: 4px; border: 1px solid #ccc;" />
+      
+      <label style="font-size: 12px; font-weight: bold;">Base URL (Optional):</label>
+      <input type="text" id="api-url-input" placeholder="https://api.groq.com/openai/v1/chat/completions" style="width: 100%; box-sizing: border-box; margin-bottom: 8px; padding: 5px; border-radius: 4px; border: 1px solid #ccc;" />
+      
+      <button id="save-settings-btn" style="background-color: #0c308c; width: 100%; padding: 8px;">Save Settings</button>
+      <p id="settings-status" style="font-size: 12px; margin: 8px 0 0 0; text-align: center; color: green;" class="hidden">Saved successfully!</p>
+    </div>
+
+    <div class="content">
+      <p id="progress-text" class="hidden">Starting...</p>
+
+      <div id="result-container" class="hidden">
+        <div id="result"></div>
+      </div>
+    </div>
+  </div>
+  <script src="../vendor/marked.min.js"></script>
+  <script src="../vendor/katex.min.js"></script>
+  <script src="../vendor/auto-render.min.js"></script>
+  <script src="popup.js"></script>
+</body>
+
+</html>
