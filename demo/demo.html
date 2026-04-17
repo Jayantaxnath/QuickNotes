@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Coursera Notes UI Demo</title>
+  <link rel="stylesheet" href="../vendor/katex.min.css">
+  <style>
+    body {
+      width: 400px;
+      max-width: 600px;
+      max-height: 80vh;
+      /* Simulating the fixed width of the Chrome extension popup */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 40px auto;
+      /* Centered on the page just for this demo */
+      padding: 0;
+      background-color: #f8f9fa;
+      color: #333;
+      border: 1px solid #ccc;
+      /* Added border to simulate the popup window boundaries */
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .container {
+      padding: 10px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .header h2 {
+      margin: 0;
+      font-size: 16px;
+      color: #0c308c;
+      margin-right: auto;
+    }
+
+    #generate-btn {
+      background-color: #1e7a36;
+      width: auto;
+      padding: 6px 14px;
+    }
+
+    #generate-btn:hover {
+      background-color: #145925;
+    }
+
+    button {
+      /* width: 100%; */
+      padding: 10px;
+      background-color: #0c308c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background-color: #082060;
+    }
+
+    button:disabled {
+      background-color: #999;
+      cursor: not-allowed;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    #progress-text {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #23c03b;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    #result-container {
+      margin-top: 16px;
+      background: white;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      max-height: 300px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    #result {
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    #result p,
+    #result ul,
+    #result ol {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    #result li {
+      margin-bottom: 4px;
+    }
+
+    #result p:last-child,
+    #result ul:last-child {
+      margin-bottom: 0;
+    }
+
+    #result h1,
+    #result h2,
+    #result h3,
+    #result h4,
+    #result h5,
+    #result h6 {
+      font-size: inherit;
+      font-weight: bold;
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <!-- Reusing the extension's actual icon -->
+      <img src="../assets/icon128.png" alt="Icon" width="24" height="24">
+      <h2>Coursera Notes</h2>
+      <button id="generate-btn">Generate</button>
+    </div>
+
+    <div class="content">
+      <p id="progress-text" class="hidden">Starting...</p>
+
+      <div id="result-container" class="hidden">
+        <div id="result"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../vendor/marked.min.js"></script>
+  <script src="../vendor/katex.min.js"></script>
+  <script src="../vendor/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const generateBtn = document.getElementById("generate-btn");
+      const progressText = document.getElementById("progress-text");
+      const resultContainer = document.getElementById("result-container");
+      const resultDiv = document.getElementById("result");
+
+      // Click Event to mimic Popup flow
+      generateBtn.addEventListener("click", async () => {
+        // Reset UI
+        resultContainer.classList.add("hidden");
+        resultDiv.innerText = "";
+        progressText.classList.remove("hidden");
+        progressText.style.color = "#23c03b";
+        generateBtn.disabled = true;
+
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        try {
+          // Simulate API call progress updates
+          progressText.innerText = "Extracting transcript...";
+          await sleep(200);
+
+          progressText.innerText = "Processing chunk 1/3...";
+          await sleep(100);
+
+          progressText.innerText = "Processing chunk 2/3...";
+          await sleep(100);
+
+          progressText.innerText = "Processing chunk 3/3...";
+          await sleep(100);
+
+          progressText.innerText = "Merging final notes...";
+          await sleep(200);
+
+          // Expected final string output simulation
+          const demoNotes = `**Machine Learning Core Concepts**
+
+- **Supervised Learning**: Training a model on labeled data
+- **Linear Regression**: Fits a straight line to data to minimize the sum of squared errors. Formula: $y = mx + b$ or
+  $$ J(\\theta) = \\frac{1}{2m} \\sum_{i=1}^{m} (h_\\theta(x^{(i)}) - y^{(i)})^2 $$
+- **Gradient Descent**: Optimization algorithm to find the minimum of a function. It takes steps proportional to the negative gradient: $\\theta_j := \\theta_j - \\alpha \\frac{\\partial}{\\partial \\theta_j} J(\\theta)$
+
+*Generated successfully via Groq API.*`;
+
+          // Render result
+          progressText.innerText = "Rendering...";
+          await sleep(400);
+
+          resultDiv.innerHTML = marked.parse(demoNotes.trim());
+          renderMathInElement(resultDiv, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true },
+              { left: '$', right: '$', display: false },
+              { left: '\\(', right: '\\)', display: false },
+              { left: '\\[', right: '\\]', display: true }
+            ],
+            throwOnError: false
+          });
+          resultContainer.classList.remove("hidden");
+          progressText.classList.add("hidden");
+
+        } catch (err) {
+          progressText.innerText = "Error: " + err.message;
+          progressText.style.color = "green";
+        } finally {
+          generateBtn.disabled = false;
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
